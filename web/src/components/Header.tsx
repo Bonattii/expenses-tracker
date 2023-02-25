@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import headerImg from '../assets/header.png';
 
 export default function Header() {
@@ -13,8 +15,8 @@ export default function Header() {
             you don't join them in this beautiful platform?
           </p>
 
-          <a
-            href="#"
+          <Link
+            to="/register"
             className="inline-flex items-center justify-center pr-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
           >
             Get started
@@ -30,7 +32,7 @@ export default function Header() {
                 clip-rule="evenodd"
               ></path>
             </svg>
-          </a>
+          </Link>
           <a
             href="#about"
             className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center border rounded-lg focus:ring-4 text-white border-accent-500 hover:bg-secondary-500 focus:ring-gray-800"

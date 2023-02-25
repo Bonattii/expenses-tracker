@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="max-w-2xl md:max-w-3xl lg:max-w-7xl px-2 py-8 mx-auto p-4 sm:p-6 bg-primary-500">
+    <footer className="mx-auto max-w-2xl md:max-w-2xl lg:max-w-7xl px-6 lg:px-8 py-8 p-4 sm:p-6 bg-primary-500">
       <div className="sm:flex sm:items-center sm:justify-between">
         <span className="text-sm text-gray-300 sm:text-center">
           © 2023{' '}

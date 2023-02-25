@@ -1,13 +1,14 @@
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Link } from 'react-router-dom';
 
 import './Navbar.css';
 
 import logo from '../assets/etracker.svg';
 
 const navigation = [
-  { name: 'Home', href: '#', current: true },
+  { name: 'Home', href: '/', current: true },
   { name: 'About', href: '#about', current: false },
   { name: 'Contact', href: '#contact', current: false }
 ];
@@ -23,7 +24,7 @@ export default function Navbar() {
     <Disclosure as="nav" className="bg-primary-500">
       {({ open }) => (
         <>
-          <div className=" mx-auto max-w-2xl md:max-w-2xl lg:max-w-7xl px-6 lg:px-8 mt-4">
+          <div className="mx-auto max-w-2xl md:max-w-2xl lg:max-w-7xl px-6 lg:px-8 mt-4">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
@@ -38,15 +39,15 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <a href="">
+                  <Link to="/">
                     <img
                       className="block h-8 w-auto lg:hidden"
                       src={logo}
                       alt="Logo"
                     />
-                  </a>
-                  <a
-                    href="#"
+                  </Link>
+                  <Link
+                    to="/"
                     className="flex items-center justify-center gap-3"
                   >
                     <img
@@ -57,7 +58,7 @@ export default function Navbar() {
                     <span className="logo-name hidden lg:block text-gray-200 font-bold text-2xl hover:cursor-pointer">
                       Expenses Tracker
                     </span>
-                  </a>
+                  </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
@@ -107,8 +108,8 @@ export default function Navbar() {
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-secondary-500 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="#"
+                            <Link
+                              to="#"
                               className={classNames(
                                 active
                                   ? 'bg-secondary-500 hover:text-accent-500'
@@ -117,7 +118,7 @@ export default function Navbar() {
                               )}
                             >
                               Sign out
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       </Menu.Items>
@@ -126,19 +127,19 @@ export default function Navbar() {
                 </div>
               ) : (
                 <div className="flex space-x-4">
-                  <a
-                    href="#"
+                  <Link
+                    to="/register"
                     className="bg-accent-500 text-primary-500 px-2 py-2 rounded-md text-sm font-medium hover:opacity-90 border-2 border-accent-500"
                   >
                     Sign Up
-                  </a>
+                  </Link>
 
-                  <a
-                    href="#"
+                  <Link
+                    to="/login"
                     className="bg-primary-500 text-gray-200 px-2 py-2 rounded-md text-sm font-medium border-2 border-accent-500 hidden lg:block hover:bg-secondary-500 "
                   >
-                    Log In
-                  </a>
+                    Sign In
+                  </Link>
                 </div>
               )}
             </div>

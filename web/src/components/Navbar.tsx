@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, UserIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
 import './Navbar.css';
@@ -13,7 +13,12 @@ const navigation = [
   { name: 'Contact', href: '#contact', current: false }
 ];
 
-const logged = false;
+const loggedNavigation = [
+  { name: 'Dashboard', href: '/dashboard', current: true },
+  { name: 'History', href: '/history', current: false }
+];
+
+const logged = true;
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -28,7 +33,7 @@ export default function Navbar() {
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-secondary-500 hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent-500">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-secondary-500 hover:text-gray-300 focus:ring-accent-500 focus:ring-2 focus:outline-none">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -62,22 +67,37 @@ export default function Navbar() {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {!logged &&
-                      navigation.map(item => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'bg-accent-500 text-primary-500'
-                              : 'text-gray-300 hover:bg-secondary-500 hover:text-white',
-                            'px-3 py-2 rounded-md text-sm font-medium'
-                          )}
-                          aria-current={item.current ? 'page' : undefined}
-                        >
-                          {item.name}
-                        </a>
-                      ))}
+                    {!logged
+                      ? navigation.map(item => (
+                          <a
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                              item.current
+                                ? 'bg-accent-500 text-primary-500'
+                                : 'text-gray-300 hover:bg-secondary-500 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium'
+                            )}
+                            aria-current={item.current ? 'page' : undefined}
+                          >
+                            {item.name}
+                          </a>
+                        ))
+                      : loggedNavigation.map(item => (
+                          <a
+                            key={item.name}
+                            href={item.href}
+                            className={classNames(
+                              item.current
+                                ? 'bg-accent-500 text-primary-500'
+                                : 'text-gray-300 hover:bg-secondary-500 hover:text-white',
+                              'px-3 py-2 rounded-md text-sm font-medium'
+                            )}
+                            aria-current={item.current ? 'page' : undefined}
+                          >
+                            {item.name}
+                          </a>
+                        ))}
                   </div>
                 </div>
               </div>
@@ -87,12 +107,12 @@ export default function Navbar() {
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">
                     <div>
-                      <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <Menu.Button className="flex rounded-full bg-primary-500 text-sm focus:ring-accent-500 focus:ring-2 focus:outline-none">
                         <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt="User image"
+                        <UserIcon
+                          className="block h-6 w-6"
+                          color="#f3ef52"
+                          fill="#141518"
                         />
                       </Menu.Button>
                     </div>
@@ -105,7 +125,7 @@ export default function Navbar() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-secondary-500 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-secondary-500 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:ring-accent-500 focus:ring-2 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
                             <Link

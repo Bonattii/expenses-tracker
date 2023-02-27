@@ -1,5 +1,8 @@
 import { prisma } from '../../utils/prisma';
-import { CreateTransactionInput } from './transaction.schema';
+import {
+  CreateTransactionInput,
+  UpdateTransactionInput
+} from './transaction.schema';
 
 export async function createTransaction(
   data: CreateTransactionInput & { ownerId: string }
@@ -13,6 +16,20 @@ export async function getTransactions(ownerId: string) {
   return prisma.transaction.findMany({
     where: {
       ownerId
+    }
+  });
+}
+
+export async function updateTransaction(
+  data: UpdateTransactionInput & { ownerId: string }
+) {
+  return prisma.transaction.update({
+    data: {
+      text: data.text,
+      value: data.value
+    },
+    where: {
+      id: data.id
     }
   });
 }

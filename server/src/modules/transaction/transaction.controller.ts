@@ -2,12 +2,14 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import {
   CreateTransactionInput,
-  DeleteTransactionInput
+  DeleteTransactionInput,
+  UpdateTransactionInput
 } from './transaction.schema';
 import {
   createTransaction,
   deleteTransactions,
-  getTransactions
+  getTransactions,
+  updateTransaction
 } from './transaction.service';
 
 export async function createTransactionHandler(
@@ -27,6 +29,17 @@ export async function getTransactionsHandler(request: FastifyRequest) {
   const transactions = await getTransactions(request.user.id);
 
   return transactions;
+}
+
+export async function updateTransactionHandler(
+  request: FastifyRequest<{ Body: UpdateTransactionInput }>
+) {
+  const transaction = await updateTransaction({
+    ...request.body,
+    ownerId: request.user.id
+  });
+
+  return transaction;
 }
 
 export async function deleteTransactionHandler(

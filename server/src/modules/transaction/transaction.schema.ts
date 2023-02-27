@@ -17,6 +17,10 @@ const createTransactionSchema = z.object({
   ...transactionInput
 });
 
+const deleteTransactionSchema = z.object({
+  id: z.string()
+});
+
 // Filter what the route should respond with
 const transactionResponseSchema = z.object({
   ...transactionInput,
@@ -28,11 +32,13 @@ const transactionsResponseSchema = z.array(transactionResponseSchema);
 
 // Will export the type to be used on the service
 export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
+export type DeleteTransactionInput = z.infer<typeof deleteTransactionSchema>;
 
 // Create the schemas and enable to ref them into the routes
 export const { schemas: transactionSchemas, $ref } = buildJsonSchemas(
   {
     createTransactionSchema,
+    deleteTransactionSchema,
     transactionResponseSchema,
     transactionsResponseSchema
   },

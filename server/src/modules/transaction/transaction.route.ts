@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 
 import {
   createTransactionHandler,
+  deleteTransactionHandler,
   getTransactionsHandler
 } from './transaction.controller';
 import { $ref } from './transaction.schema';
@@ -32,5 +33,16 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       }
     },
     getTransactionsHandler
+  );
+
+  fastify.delete(
+    '/',
+    {
+      preHandler: [fastify.authenticate],
+      schema: {
+        body: $ref('deleteTransactionSchema')
+      }
+    },
+    deleteTransactionHandler
   );
 }

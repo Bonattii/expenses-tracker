@@ -16,3 +16,11 @@ export async function getTransactions(ownerId: string) {
     }
   });
 }
+
+export async function deleteTransactions(id: string) {
+  return prisma.transaction.delete({
+    where: {
+      id
+    }
+  });
+}

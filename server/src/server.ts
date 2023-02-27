@@ -31,11 +31,7 @@ fastify.decorate(
 
 async function bootstrap() {
   // Register the schemas into the server
-  for (const schema of userSchemas) {
-    fastify.addSchema(schema);
-  }
-
-  for (const schema of transactionSchemas) {
+  for (const schema of [...userSchemas, ...transactionSchemas]) {
     fastify.addSchema(schema);
   }
 

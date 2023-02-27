@@ -50,9 +50,12 @@ export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 
 // Create the schemas and enable to ref them into the routes
-export const { schemas: userSchemas, $ref } = buildJsonSchemas({
-  createUserSchema,
-  createUserResponseSchema,
-  loginSchema,
-  loginResponseSchema
-});
+export const { schemas: userSchemas, $ref } = buildJsonSchemas(
+  {
+    createUserSchema,
+    createUserResponseSchema,
+    loginSchema,
+    loginResponseSchema
+  },
+  { $id: 'UserSchema' }
+);

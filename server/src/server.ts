@@ -1,14 +1,32 @@
-import Fastify from 'fastify';
+import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
+import jwt from '@fastify/jwt';
 
 import { userRoutes } from './modules/user/user.route';
 import { userSchemas } from './modules/user/user.schema';
 
-async function bootstrap() {
-  // Initializa the server
-  const fastify = Fastify({
-    logger: true
-  });
+// Initialize the server and export to be used on the user controller
+export const fastify = Fastify({
+  logger: true
+});
 
+// Register jwt into the server
+fastify.register(jwt, {
+  secret: 'asmgjngnosajfndpuiasuHUHUDFUHASdndifsdia'
+});
+
+// Customize the core fastify object to have the authenticate
+fastify.decorate(
+  'authenticate',
+  async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await request.jwtVerify();
+    } catch (error) {
+      return reply.send(error);
+    }
+  }
+);
+
+async function bootstrap() {
   // Register the schemas into the server
   for (const schema of userSchemas) {
     fastify.addSchema(schema);

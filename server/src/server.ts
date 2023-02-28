@@ -1,6 +1,7 @@
 require('dotenv').config();
 import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import jwt from '@fastify/jwt';
+import cors from '@fastify/cors';
 
 import { userRoutes } from './modules/user/user.route';
 import { userSchemas } from './modules/user/user.schema';
@@ -11,6 +12,8 @@ import { transactionSchemas } from './modules/transaction/transaction.schema';
 export const fastify = Fastify({
   logger: true
 });
+
+fastify.register(cors);
 
 // Register jwt into the server
 fastify.register(jwt, {

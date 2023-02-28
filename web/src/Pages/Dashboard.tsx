@@ -46,6 +46,7 @@ export default function Dashboard() {
       })
       .then(response => {
         setTransactions(response.data);
+        setIsSubmitted(false);
       });
   }, [isSubmitted]);
 
@@ -78,9 +79,11 @@ export default function Dashboard() {
           0
         )
     );
+
+    setIsSubmitted(false);
   }, [transactions]);
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
     if (!transactionText || !transactionValue) {
@@ -109,37 +112,18 @@ export default function Dashboard() {
         setTransactionValue('');
       });
 
-    // Update the user balance
-    setBalance(
-      transactions?.reduce(
-        (accumulator, currentValue) => accumulator + currentValue.value / 100,
-        0
-      )
-    );
-
-    // Filter for values > 0 and than sum
-    setIncome(
-      transactions
-        ?.filter(transaction => transaction.value > 0)
-        ?.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.value / 100,
-          0
-        )
-    );
-
-    // Filter for values < 0 and than sum
-    setExpenses(
-      transactions
-        ?.filter(transaction => transaction.value < 0)
-        ?.reduce(
-          (accumulator, currentValue) =>
-            accumulator + (currentValue.value / 100) * -1,
-          0
-        )
-    );
-
-    // Make the data get called again when submitted
     setIsSubmitted(true);
+  }
+
+  async function deleteTransaction(id: string) {
+    api
+      .delete('/api/transactions', {
+        data: {
+          id
+        },
+        headers: { Authorization: `Bearer ${userToken}` }
+      })
+      .then(() => setIsSubmitted(true));
   }
 
   return (
@@ -180,8 +164,11 @@ export default function Dashboard() {
                   {transactions?.slice(-3).map(transaction => {
                     return (
                       <HistoryBox
+                        key={transaction.id}
                         text={transaction.text}
                         value={transaction.value / 100}
+                        id={transaction.id}
+                        onDelete={deleteTransaction}
                       />
                     );
                   })}

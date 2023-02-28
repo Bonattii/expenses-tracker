@@ -1,11 +1,17 @@
 import clsx from 'clsx';
 
 interface HistoryBox {
+  id: string;
   text: string;
   value: number;
+  onDelete: Function;
 }
 
 export default function HistoryBox(props: HistoryBox) {
+  async function handleClick() {
+    props.onDelete(props.id);
+  }
+
   return (
     <div
       className={clsx(
@@ -17,9 +23,14 @@ export default function HistoryBox(props: HistoryBox) {
       )}
     >
       <div className="absolute -left-6">
-        <div className="cursor-pointer bg-red-600 p-2 w-6 flex items-center text-xs text-white justify-center mt-[-7px]">
-          x
-        </div>
+        <button>
+          <div
+            onClick={handleClick}
+            className="cursor-pointer bg-red-600 p-2 w-6 flex items-center text-xs text-white justify-center mt-[-7px]"
+          >
+            x
+          </div>
+        </button>
       </div>
       <div>
         <p>{props.text}</p>

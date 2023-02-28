@@ -1,6 +1,8 @@
 import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline';
 
 import HomeInput from './HomeInput';
+import Label from './Label';
+import Textarea from './Textarea';
 
 const waysOfContact = [
   { name: 'Phone Number', content: '(604) 123-4567' },
@@ -61,29 +63,43 @@ export default function Contact() {
             <div className="relative rounded-lg bg-secondary-500 p-8 shadow-lg sm:p-12">
               <form>
                 <div className="mb-6">
-                  <HomeInput placeholder="Your Name" />
+                  <Label htmlFor="contactName" content="Name" />
+                  <HomeInput
+                    id="contactName"
+                    placeholder="Your Name"
+                    required
+                  />
                 </div>
 
                 <div className="mb-6">
-                  <HomeInput type="email" placeholder="Your Email" />
+                  <Label htmlFor="contactEmail" content="Email" />
+                  <HomeInput
+                    id="contactEmail"
+                    type="email"
+                    placeholder="Your Email"
+                    required
+                  />
                 </div>
 
                 <div className="mb-6">
-                  <HomeInput placeholder="Your Phone" />
+                  <Label htmlFor="contactPhone" content="Phone" />
+                  <HomeInput id="contactPhone" placeholder="Your Phone" />
                 </div>
 
                 <div className="mb-6">
-                  <textarea
+                  <Label htmlFor="contactMessage" content="Message" />
+                  <Textarea
+                    id="contactMessage"
                     rows={6}
                     placeholder="Your Message"
-                    className="text-gray-300 bg-secondary-500 border-gray-300 focus:border-primary-500 w-full resize-none rounded border py-3 px-[14px] text-base outline-none focus-visible:shadow-none"
-                  ></textarea>
+                    required
+                  />
                 </div>
 
                 <div>
                   <button
                     type="submit"
-                    className="bg-primary border-primary w-full rounded border p-3 text-white transition bg-secondary-500 hover:opacity-70 focus:ring-primary-500 focus:ring-4 focus:outline-none"
+                    className="bg-primary border-primary w-full rounded border p-3 text-white transition bg-secondary-500 hover:opacity-70 focus:ring-accent-500 focus:ring-4 focus:outline-none"
                   >
                     Send Message
                   </button>

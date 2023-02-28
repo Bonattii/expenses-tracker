@@ -1,4 +1,8 @@
 import { PieChart, Pie, Cell } from 'recharts';
+import AuthButton from '../components/AuthButton';
+import AuthInput from '../components/AuthInput';
+import HistoryBox from '../components/HistoryBox';
+import Label from '../components/Label';
 
 const data = [
   { text: 'Salary', amount: 2000 },
@@ -39,47 +43,10 @@ export default function Dashboard() {
                 <h2 className="font-semibold text-lg">History</h2>
               </div>
 
-              <div className="ml-6 relative bg-secondary-500 p-4 border-r-8 shadow-md my-4 flex justify-between border-accent-500">
-                <div className="absolute -left-6">
-                  <div className="cursor-pointer bg-red-600 p-2 w-6 flex items-center text-xs text-white justify-center mt-[-7px]">
-                    x
-                  </div>
-                </div>
-                <div>
-                  <p>My wallet</p>
-                </div>
-                <div>
-                  <p>$ +400</p>
-                </div>
-              </div>
-
-              <div className="ml-6 relative bg-secondary-500 p-4 border-r-8 shadow-md my-4 flex justify-between border-red-600">
-                <div className="absolute -left-6">
-                  <div className="cursor-pointer bg-red-600 p-2 w-6 flex items-center text-xs text-white justify-center mt-[-7px]">
-                    x
-                  </div>
-                </div>
-                <div>
-                  <p>My wallet</p>
-                </div>
-                <div>
-                  <p>$ -400</p>
-                </div>
-              </div>
-
-              <div className="ml-6 relative bg-secondary-500 p-4 border-r-8 shadow-md my-4 flex justify-between border-accent-500">
-                <div className="absolute -left-6">
-                  <div className="cursor-pointer bg-red-600 p-2 w-6 flex items-center text-xs text-white justify-center mt-[-7px]">
-                    x
-                  </div>
-                </div>
-                <div>
-                  <p>My wallet</p>
-                </div>
-                <div>
-                  <p>$ +400</p>
-                </div>
-              </div>
+              {/* Change for a map with the api data */}
+              <HistoryBox text="My wallet" value={400} />
+              <HistoryBox text="My wallet" value={-400} />
+              <HistoryBox text="My wallet" value={400} />
             </div>
 
             <div className="px-8 my-6">
@@ -90,20 +57,20 @@ export default function Dashboard() {
               <div className="bg-primary-500 border-2 border-secondary-500 p-4 rounded-md">
                 <form className="mt-4">
                   <div className="my-5 text-sm">
-                    <label htmlFor="text" className="block text-white">
-                      Text
-                    </label>
-                    <input
+                    <Label htmlFor="text" content="Text" />
+                    <AuthInput
                       name="text"
                       id="text"
                       autoFocus
-                      className="rounded-sm px-4 py-3 mt-1 focus:ring-accent-500 focus:ring-4 focus:outline-none bg-secondary-500 w-full"
                       placeholder="Enter Text"
                     />
                   </div>
 
                   <div className="my-5 text-sm">
-                    <label htmlFor="amount" className="block text-white">
+                    <label
+                      htmlFor="amount"
+                      className="block mb-2 text-sm font-medium"
+                    >
                       Amount
                       <small className="text-white">
                         {' '}
@@ -119,19 +86,16 @@ export default function Dashboard() {
                         )
                       </small>
                     </label>
-                    <input
+                    <AuthInput
                       name="amount"
                       id="amount"
                       autoFocus
-                      className="rounded-sm px-4 py-3 mt-1 focus:ring-accent-500 focus:ring-4 focus:outline-none bg-secondary-500 w-full"
                       placeholder="Enter Amount"
                     />
                   </div>
 
                   <div className="my-5">
-                    <button className="rounded-sm block text-center text-white bg-secondary-500 p-3 duration-300 hover:bg-accent-500 hover:text-primary-500 w-full focus:ring-accent-500 focus:ring-4 focus:outline-none">
-                      Add Transaction
-                    </button>
+                    <AuthButton title="Add Transaction" />
                   </div>
                 </form>
               </div>

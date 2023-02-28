@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { api } from '../lib/axios';
 
 import Label from './Label';
 import AuthInput from './AuthInput';
@@ -17,8 +18,30 @@ export default function TableRow(props: TableRowProps) {
   const [updateText, setUpdateText] = useState('');
   const [updateValue, setUpdateValue] = useState('');
 
+  const userToken = localStorage.getItem('user-token');
+
   async function handleClick() {
     props.onDelete(props.id);
+  }
+
+  async function handleUpdate() {
+    api
+      .put(
+        '/api/transactions',
+        {
+          text: updateText,
+          value: Number(updateValue) * 100,
+          id: props.id
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`
+          }
+        }
+      )
+      .then(() => {
+        alert('Transaction successfully updated!');
+      });
   }
 
   return (
@@ -50,29 +73,31 @@ export default function TableRow(props: TableRowProps) {
                 Update Transaction
               </Dialog.Title>
 
-              <div className="mt-8">
-                <Label htmlFor="updateValue" content="New Value" />
-                <AuthInput
-                  id="updateValue"
-                  placeholder="New Value"
-                  value={updateValue}
-                  onChange={event => setUpdateValue(event.target.value)}
-                  required
-                />
-              </div>
+              <form onSubmit={handleUpdate}>
+                <div className="mt-8">
+                  <Label htmlFor="updateText" content="New Text" />
+                  <AuthInput
+                    id="updateText"
+                    placeholder="New Text"
+                    value={updateText}
+                    onChange={event => setUpdateText(event.target.value)}
+                    required
+                  />
+                </div>
 
-              <div className="mt-8 mb-8">
-                <Label htmlFor="updateText" content="New Text" />
-                <AuthInput
-                  id="updateText"
-                  placeholder="New Text"
-                  value={updateText}
-                  onChange={event => setUpdateText(event.target.value)}
-                  required
-                />
-              </div>
+                <div className="mt-8 mb-8">
+                  <Label htmlFor="updateValue" content="New Value" />
+                  <AuthInput
+                    id="updateValue"
+                    placeholder="New Value"
+                    value={updateValue}
+                    onChange={event => setUpdateValue(event.target.value)}
+                    required
+                  />
+                </div>
 
-              <AuthButton title="Update" />
+                <AuthButton title="Update" />
+              </form>
             </Dialog.Content>
           </Dialog.Portal>
         </Dialog.Root>

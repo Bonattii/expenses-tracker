@@ -1,9 +1,49 @@
+import { useEffect, useState } from 'react';
+import { api } from '../lib/axios';
+
 import LoginWarning from '../components/LoginWarning';
 import TableRow from '../components/TableRow';
 import Th from '../components/Th';
 
 export default function History() {
+  const [transactions, setTransactions] = useState<
+    [
+      {
+        text: string;
+        value: number;
+        id: string;
+        createdAt: string;
+        updatedAt: string;
+      }
+    ]
+  >();
+  const [isDeleted, setIsDeleted] = useState(false);
+
   const userToken = localStorage.getItem('user-token');
+
+  useEffect(() => {
+    api
+      .get('/api/transactions', {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
+      .then(response => {
+        setTransactions(response.data);
+        setIsDeleted(false);
+      });
+  }, [isDeleted]);
+
+  async function deleteTransaction(id: string) {
+    api
+      .delete('/api/transactions', {
+        data: {
+          id
+        },
+        headers: { Authorization: `Bearer ${userToken}` }
+      })
+      .then(() => setIsDeleted(true));
+  }
 
   return (
     <>
@@ -23,7 +63,15 @@ export default function History() {
                   </thead>
 
                   <tbody className="divide-y divide-gray-200">
-                    <TableRow text="John Doe" value={6000.55} />
+                    {transactions?.map(transaction => (
+                      <TableRow
+                        key={transaction.id}
+                        text={transaction.text}
+                        value={transaction.value / 100}
+                        id={transaction.id}
+                        onDelete={deleteTransaction}
+                      />
+                    ))}
                   </tbody>
                 </table>
               </div>

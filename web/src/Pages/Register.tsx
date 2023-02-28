@@ -101,7 +101,10 @@ export default function Register() {
               </div>
 
               <div>
-                <Label htmlFor="confirmPassword" content="Confirm Password" />
+                <Label
+                  htmlFor="registerConfirmPassword"
+                  content="Confirm Password"
+                />
                 <AuthInput
                   type="password"
                   id="registerConfirmPassword"

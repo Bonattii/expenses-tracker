@@ -1,4 +1,6 @@
+import { FormEvent, useEffect, useState } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
+import { api } from '../lib/axios';
 
 import AuthButton from '../components/AuthButton';
 import AuthInput from '../components/AuthInput';
@@ -6,15 +8,139 @@ import HistoryBox from '../components/HistoryBox';
 import Label from '../components/Label';
 import LoginWarning from '../components/LoginWarning';
 
-const data = [
-  { text: 'Salary', amount: 2000 },
-  { text: 'Rent', amount: 1600 }
-];
-
 const colors = ['#f3ef52', '#DC2626'];
 
 export default function Dashboard() {
+  const [transactionText, setTransactionText] = useState('');
+  const [transactionValue, setTransactionValue] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [balance, setBalance] = useState<number>();
+  const [income, setIncome] = useState<number>();
+  const [expenses, setExpenses] = useState<number>();
+  const [transactions, setTransactions] = useState<
+    [
+      {
+        text: string;
+        value: number;
+        id: string;
+        createdAt: string;
+        updatedAt: string;
+      }
+    ]
+  >();
+
   const userToken = localStorage.getItem('user-token');
+
+  const graphicData = [
+    { text: 'Income', amount: income },
+    { text: 'Expenses', amount: expenses }
+  ];
+
+  // Get all the users transactions
+  useEffect(() => {
+    api
+      .get('/api/transactions', {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      })
+      .then(response => {
+        setTransactions(response.data);
+      });
+  }, [isSubmitted]);
+
+  // Update the balance for the first time b4 adding a new one
+  useEffect(() => {
+    setBalance(
+      transactions?.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.value / 100,
+        0
+      )
+    );
+
+    // Filter for values > 0 and than sum
+    setIncome(
+      transactions
+        ?.filter(transaction => transaction.value > 0)
+        ?.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.value / 100,
+          0
+        )
+    );
+
+    // Filter for values < 0 and than sum
+    setExpenses(
+      transactions
+        ?.filter(transaction => transaction.value < 0)
+        ?.reduce(
+          (accumulator, currentValue) =>
+            accumulator + (currentValue.value / 100) * -1,
+          0
+        )
+    );
+  }, [transactions]);
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+
+    if (!transactionText || !transactionValue) {
+      return;
+    }
+
+    api
+      .post(
+        '/api/transactions',
+        {
+          text: transactionText,
+          value: Number(transactionValue) * 100 // Transform into cents
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`
+          }
+        }
+      )
+      .then(response => {
+        if (!response) {
+          alert('Unable to create transaction. Please try again!');
+        }
+
+        setTransactionText('');
+        setTransactionValue('');
+      });
+
+    // Update the user balance
+    setBalance(
+      transactions?.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.value / 100,
+        0
+      )
+    );
+
+    // Filter for values > 0 and than sum
+    setIncome(
+      transactions
+        ?.filter(transaction => transaction.value > 0)
+        ?.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.value / 100,
+          0
+        )
+    );
+
+    // Filter for values < 0 and than sum
+    setExpenses(
+      transactions
+        ?.filter(transaction => transaction.value < 0)
+        ?.reduce(
+          (accumulator, currentValue) =>
+            accumulator + (currentValue.value / 100) * -1,
+          0
+        )
+    );
+
+    // Make the data get called again when submitted
+    setIsSubmitted(true);
+  }
 
   return (
     <>
@@ -27,21 +153,21 @@ export default function Dashboard() {
                   <h4 className="text-lg text-gray-400 font-thin">
                     Your Balance
                   </h4>
-                  <h4 className="text-2xl font-semibold">CAD$ 430.00</h4>
+                  <h4 className="text-2xl font-semibold">CAD$ {balance}</h4>
                 </div>
 
                 <div className="flex space-x-0 flex-col lg:flex-row lg:space-x-2 my-2 px-6">
                   <div className="bg-accent-500 p-4 rounded-md shadow-lg w-full text-secondary-500 text-center">
                     <h1 className="text-xl font-light">INCOME</h1>
                     <h1 className="text-2xl text-primary-500 font-semibold">
-                      $ 6000.00
+                      $ {income}
                     </h1>
                   </div>
 
                   <div className="bg-red-600 p-4 rounded-md shadow-lg w-full text-secondary-500 text-center">
-                    <h1 className="text-xl font-light">EXPENSE</h1>
+                    <h1 className="text-xl font-light">EXPENSES</h1>
                     <h1 className="text-2xl text-primary-500 font-semibold">
-                      $ 170.00
+                      $ {expenses}
                     </h1>
                   </div>
                 </div>
@@ -50,11 +176,15 @@ export default function Dashboard() {
                   <div className="my-4 border-b w-full">
                     <h2 className="font-semibold text-lg">History</h2>
                   </div>
-
-                  {/* Change for a map with the api data */}
-                  <HistoryBox text="My wallet" value={400} />
-                  <HistoryBox text="My wallet" value={-400} />
-                  <HistoryBox text="My wallet" value={400} />
+                  {/* Render the last 3 transactions */}
+                  {transactions?.slice(-3).map(transaction => {
+                    return (
+                      <HistoryBox
+                        text={transaction.text}
+                        value={transaction.value / 100}
+                      />
+                    );
+                  })}
                 </div>
 
                 <div className="px-8 my-6">
@@ -65,20 +195,24 @@ export default function Dashboard() {
                   </div>
 
                   <div className="bg-primary-500 border-2 border-secondary-500 p-4 rounded-md">
-                    <form className="mt-4">
+                    <form onSubmit={handleSubmit} className="mt-4">
                       <div className="my-5 text-sm">
-                        <Label htmlFor="text" content="Text" />
+                        <Label htmlFor="transactionText" content="Text" />
                         <AuthInput
-                          name="text"
-                          id="text"
+                          id="transactionText"
                           autoFocus
                           placeholder="Enter Text"
+                          value={transactionText}
+                          onChange={event =>
+                            setTransactionText(event.target.value)
+                          }
+                          required
                         />
                       </div>
 
                       <div className="my-5 text-sm">
                         <label
-                          htmlFor="amount"
+                          htmlFor="transactionValue"
                           className="block mb-2 text-sm font-medium"
                         >
                           Amount
@@ -98,10 +232,14 @@ export default function Dashboard() {
                           </small>
                         </label>
                         <AuthInput
-                          name="amount"
-                          id="amount"
+                          id="transactionValue"
                           autoFocus
                           placeholder="Enter Amount"
+                          value={transactionValue}
+                          onChange={event =>
+                            setTransactionValue(event.target.value)
+                          }
+                          required
                         />
                       </div>
 
@@ -118,7 +256,7 @@ export default function Dashboard() {
               <PieChart width={500} height={700}>
                 <Pie
                   className="focus:outline-none"
-                  data={data}
+                  data={graphicData}
                   dataKey="amount"
                   outerRadius={150}
                   innerRadius={100}
@@ -126,7 +264,7 @@ export default function Dashboard() {
                   label
                   stroke="#27292f"
                 >
-                  {data.map((entry, index) => (
+                  {graphicData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={colors[index]} />
                   ))}
                 </Pie>

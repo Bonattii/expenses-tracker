@@ -8,10 +8,12 @@ import AuthButton from '../components/AuthButton';
 import AuthLinkTitle from '../components/AuthLinkTitle';
 import AuthTitle from '../components/AuthTitle';
 import AuthParagraph from '../components/AuthParagraph';
+import AuthError from '../components/AuthError';
 
 export default function Login() {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [enableToLogin, setEnableToLogin] = useState(false);
   const navigate = useNavigate();
 
   async function handleLogin(event: FormEvent) {
@@ -30,7 +32,7 @@ export default function Login() {
         const token = response.data.accesToken;
 
         if (!token) {
-          alert('Unable to login. Please try again!');
+          setEnableToLogin(true);
         }
 
         // Store the user token on the local storage of the browser
@@ -42,8 +44,10 @@ export default function Login() {
         }, 500);
       })
       .catch(error => {
-        alert('Oops! Some error occured, please try again');
+        setEnableToLogin(true);
       });
+
+    setEnableToLogin(false);
   }
 
   return (
@@ -80,6 +84,10 @@ export default function Login() {
                   required
                 />
               </div>
+
+              {enableToLogin && (
+                <AuthError content="Invalid email or password!" />
+              )}
 
               <AuthButton title="Sign In" />
 

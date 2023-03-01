@@ -8,12 +8,15 @@ import AuthLinkTitle from '../components/AuthLinkTitle';
 import AuthParagraph from '../components/AuthParagraph';
 import AuthTitle from '../components/AuthTitle';
 import Label from '../components/Label';
+import AuthError from '../components/AuthError';
 
 export default function Register() {
   const [registerName, setRegisterName] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [registerConfirmPassword, setRegisterConfirmPassword] = useState('');
+  const [enableToRegister, setEnableToRegister] = useState(false);
+  const [passwordMatch, setPasswordMatch] = useState(false);
   const navigate = useNavigate();
 
   async function handleRegister(event: FormEvent) {
@@ -29,7 +32,7 @@ export default function Register() {
     }
 
     if (registerPassword !== registerConfirmPassword) {
-      alert('Passwords should Match');
+      setPasswordMatch(true);
       return;
     }
 
@@ -43,7 +46,7 @@ export default function Register() {
         const data = response.data;
 
         if (!data) {
-          alert('Unable to login. Please try again!');
+          setEnableToRegister(true);
         }
 
         setTimeout(() => {
@@ -51,8 +54,12 @@ export default function Register() {
         }, 500);
       })
       .catch(error => {
-        alert('Oops! Some error occured, please try again');
+        setEnableToRegister(true);
+        console.log(error);
       });
+
+    setEnableToRegister(false);
+    setPasswordMatch(false);
   }
 
   return (
@@ -96,7 +103,9 @@ export default function Register() {
                   placeholder="••••••••"
                   required
                   value={registerPassword}
-                  onChange={event => setRegisterPassword(event.target.value)}
+                  onChange={event => {
+                    setRegisterPassword(event.target.value);
+                  }}
                 />
               </div>
 
@@ -116,6 +125,12 @@ export default function Register() {
                   }
                 />
               </div>
+
+              {enableToRegister && (
+                <AuthError content="Unable to register. Please try again!" />
+              )}
+
+              {passwordMatch && <AuthError content="Passwords should match!" />}
 
               <AuthButton title="Sign Up" />
 

@@ -23,7 +23,7 @@ export default function HistoryBox(props: HistoryBox) {
       )}
     >
       <div className="absolute -left-6">
-        <button>
+        <button aria-label="delete">
           <div
             onClick={handleClick}
             className="cursor-pointer bg-red-600 p-2 w-6 flex items-center text-xs text-white justify-center mt-[-7px]"

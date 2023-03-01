@@ -129,6 +129,7 @@ export default function Navbar() {
                           className="block h-6 w-6"
                           color="#f3ef52"
                           fill="#141518"
+                          aria-label="click to sign out"
                         />
                       </Menu.Button>
                     </div>

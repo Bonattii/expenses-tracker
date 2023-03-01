@@ -17,7 +17,7 @@ export default function Header() {
 
           <Link
             to="/register"
-            className="inline-flex items-center justify-center pr-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-900"
+            className="inline-flex items-center justify-center pr-5 py-3 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-accent-500 focus:ring-2 focus:outline-none"
           >
             Get started
             <svg
@@ -35,7 +35,7 @@ export default function Header() {
           </Link>
           <a
             href="#about"
-            className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center border rounded-lg focus:ring-4 text-white border-accent-500 hover:bg-secondary-500 focus:ring-gray-800"
+            className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center border rounded-lg text-white border-accent-500 hover:bg-secondary-500 focus:ring-accent-500 focus:ring-2 focus:outline-none"
           >
             Learn more
           </a>

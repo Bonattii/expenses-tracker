@@ -106,6 +106,9 @@ export default function Register() {
                   onChange={event => {
                     setRegisterPassword(event.target.value);
                   }}
+                  autoComplete="off"
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$"
+                  title="Password must be 8-10 (With 1 capital, 1 lower and 1 special character)"
                 />
               </div>
 
@@ -120,6 +123,9 @@ export default function Register() {
                   placeholder="••••••••"
                   required
                   value={registerConfirmPassword}
+                  autoComplete="off"
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$"
+                  title="Password must be 8-10 (With 1 capital, 1 lower and 1 special character)"
                   onChange={event =>
                     setRegisterConfirmPassword(event.target.value)
                   }

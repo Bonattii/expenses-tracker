@@ -82,6 +82,7 @@ export default function Login() {
                   value={loginPassword}
                   onChange={event => setLoginPassword(event.target.value)}
                   required
+                  autoComplete="off"
                 />
               </div>
 

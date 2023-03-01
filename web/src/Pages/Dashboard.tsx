@@ -194,6 +194,7 @@ export default function Dashboard() {
                             setTransactionText(event.target.value)
                           }
                           required
+                          autoComplete="off"
                         />
                       </div>
 
@@ -227,6 +228,7 @@ export default function Dashboard() {
                             setTransactionValue(event.target.value)
                           }
                           required
+                          autoComplete="off"
                         />
                       </div>
 

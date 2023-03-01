@@ -56,7 +56,7 @@ export default function TableRow(props: TableRowProps) {
         <Dialog.Root>
           <Dialog.Trigger
             type="button"
-            className="text-accent-500 hover:opacity-90"
+            className="text-accent-500 hover:opacity-90 focus:ring-accent-500 focus:ring-2 focus:outline-none"
           >
             Edit
           </Dialog.Trigger>
@@ -66,7 +66,7 @@ export default function TableRow(props: TableRowProps) {
 
             <Dialog.Content className="absolute p-10 mt-32 bg-primary-500 border border-accent-500 rounded-2xl w-full max-w-md top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <Dialog.Close className="absolute right-6 top-6 text-gray-400 rounded-lg hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 focus:ring-offset-primary-500">
-                <XMarkIcon className="block h-6 w-6" />
+                <XMarkIcon className="block h-6 w-6" aria-label="close" />
               </Dialog.Close>
 
               <Dialog.Title className="text-3xl leading-tight font-bold">
@@ -82,6 +82,7 @@ export default function TableRow(props: TableRowProps) {
                     value={updateText}
                     onChange={event => setUpdateText(event.target.value)}
                     required
+                    autoComplete="off"
                   />
                 </div>
 
@@ -93,6 +94,7 @@ export default function TableRow(props: TableRowProps) {
                     value={updateValue}
                     onChange={event => setUpdateValue(event.target.value)}
                     required
+                    autoComplete="off"
                   />
                 </div>
 
@@ -105,7 +107,7 @@ export default function TableRow(props: TableRowProps) {
       <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
         <button
           onClick={handleClick}
-          className="text-red-600 hover:text-red-700"
+          className="text-red-600 hover:text-red-700 focus:ring-red-600 focus:ring-2 focus:outline-none"
         >
           Delete
         </button>

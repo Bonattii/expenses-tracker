@@ -93,6 +93,7 @@ export default function Contact() {
                     rows={6}
                     placeholder="Your Message"
                     required
+                    autoComplete="off"
                   />
                 </div>
 

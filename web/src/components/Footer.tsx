@@ -4,7 +4,10 @@ export default function Footer() {
       <div className="sm:flex sm:items-center sm:justify-between">
         <span className="text-sm text-gray-300 sm:text-center">
           © 2023{' '}
-          <a href="#" className="hover:underline">
+          <a
+            href="#"
+            className="hover:underline focus:ring-accent-500 focus:ring-2 focus:outline-none"
+          >
             Expenses Tracker™
           </a>
           . All Rights Reserved.
@@ -12,7 +15,7 @@ export default function Footer() {
         <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
           <a
             href="https://facebook.com/rodrigobonatti"
-            className="text-gray-500 hover:text-white"
+            className="text-gray-500 hover:text-white focus:ring-accent-500 focus:ring-2 focus:outline-none"
             target="_blank"
           >
             <svg
@@ -31,7 +34,7 @@ export default function Footer() {
           </a>
           <a
             href="https://instagram.com/rodrigobonatti_"
-            className="text-gray-500 hover:text-white"
+            className="text-gray-500 hover:text-white focus:ring-accent-500 focus:ring-2 focus:outline-none"
             target="_blank"
           >
             <svg
@@ -50,7 +53,7 @@ export default function Footer() {
           </a>
           <a
             href="https://twitter.com/bonatti_rodrigo"
-            className="text-gray-500 hover:text-white"
+            className="text-gray-500 hover:text-white focus:ring-accent-500 focus:ring-2 focus:outline-none"
             target="_blank"
           >
             <svg
@@ -65,7 +68,7 @@ export default function Footer() {
           </a>
           <a
             href="https://github.com/Bonattii"
-            className="text-gray-500 hover:text-white"
+            className="text-gray-500 hover:text-white focus:ring-accent-500 focus:ring-2 focus:outline-none"
             target="_blank"
           >
             <svg

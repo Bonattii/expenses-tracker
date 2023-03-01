@@ -45,7 +45,7 @@ export default function Navbar() {
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-secondary-500 hover:text-gray-300 focus:ring-accent-500 focus:ring-2 focus:outline-none">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-secondary-500 hover:text-gray-300">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -57,7 +57,10 @@ export default function Navbar() {
 
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <Link to="/">
+                  <Link
+                    to="/"
+                    className="focus:ring-accent-500 focus:ring-2 focus:outline-none"
+                  >
                     <img
                       className="block h-8 w-auto lg:hidden"
                       src={logo}
@@ -67,7 +70,7 @@ export default function Navbar() {
 
                   <Link
                     to="/"
-                    className="flex items-center justify-center gap-3"
+                    className="flex items-center justify-center gap-3 focus:ring-accent-500 focus:ring-2 focus:outline-none"
                   >
                     <img
                       className="hidden h-8 w-auto lg:block hover:cursor-pointer"
@@ -92,9 +95,8 @@ export default function Navbar() {
                               item.current
                                 ? 'bg-accent-500 text-primary-500'
                                 : 'text-gray-300 hover:bg-secondary-500 hover:text-white',
-                              'px-3 py-2 rounded-md text-sm font-medium'
+                              'px-3 py-2 rounded-md text-sm font-medium focus:ring-accent-500 focus:ring-2 focus:outline-none'
                             )}
-                            aria-current={item.current ? 'page' : undefined}
                           >
                             {item.name}
                           </a>
@@ -105,8 +107,8 @@ export default function Navbar() {
                             to={item.href}
                             className={({ isActive }) =>
                               isActive
-                                ? 'bg-accent-500 text-primary-500 px-3 py-2 rounded-md text-sm font-medium'
-                                : 'text-gray-300 hover:bg-secondary-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium'
+                                ? 'bg-accent-500 text-primary-500 px-3 py-2 rounded-md text-sm font-medium focus:ring-accent-500 focus:ring-2 focus:outline-none'
+                                : 'text-gray-300 hover:bg-secondary-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium focus:ring-accent-500 focus:ring-2 focus:outline-none'
                             }
                           >
                             {item.name}
@@ -164,14 +166,14 @@ export default function Navbar() {
                 <div className="flex space-x-4">
                   <Link
                     to="/register"
-                    className="bg-accent-500 text-primary-500 px-2 py-2 rounded-md text-sm font-medium hover:opacity-90 border-2 border-accent-500"
+                    className="bg-accent-500 text-primary-500 px-2 py-2 rounded-md text-sm font-medium hover:opacity-90 border-2 border-accent-500 focus:ring-accent-500 focus:ring-2 focus:outline-none"
                   >
                     Sign Up
                   </Link>
 
                   <Link
                     to="/login"
-                    className="bg-primary-500 text-gray-200 px-2 py-2 rounded-md text-sm font-medium border-2 border-accent-500 hidden lg:block hover:bg-secondary-500 "
+                    className="bg-primary-500 text-gray-200 px-2 py-2 rounded-md text-sm font-medium border-2 border-accent-500 hidden lg:block hover:bg-secondary-500 focus:ring-accent-500 focus:ring-2 focus:outline-none"
                   >
                     Sign In
                   </Link>
@@ -192,9 +194,8 @@ export default function Navbar() {
                         item.current
                           ? 'bg-accent-500 text-primary-500'
                           : 'text-gray-300 hover:bg-secondary-500 hover:text-white',
-                        'block px-3 py-2 rounded-md text-base font-medium'
+                        'block px-3 py-2 rounded-md text-base font-medium focus:ring-accent-500 focus:ring-2 focus:outline-none'
                       )}
-                      aria-current={item.current ? 'page' : undefined}
                     >
                       {item.name}
                     </Disclosure.Button>
@@ -208,9 +209,8 @@ export default function Navbar() {
                         item.current
                           ? 'bg-accent-500 text-primary-500'
                           : 'text-gray-300 hover:bg-secondary-500 hover:text-white',
-                        'block px-3 py-2 rounded-md text-base font-medium'
+                        'block px-3 py-2 rounded-md text-base font-medium focus:ring-accent-500 focus:ring-2 focus:outline-none'
                       )}
-                      aria-current={item.current ? 'page' : undefined}
                     >
                       {item.name}
                     </Disclosure.Button>

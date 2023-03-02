@@ -47,8 +47,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-
-export default async (request: FastifyRequest, reply: FastifyReply) => {
-  await fastify.ready();
-  fastify.server.emit('request', request, reply);
-};

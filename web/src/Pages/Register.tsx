@@ -17,10 +17,13 @@ export default function Register() {
   const [registerConfirmPassword, setRegisterConfirmPassword] = useState('');
   const [enableToRegister, setEnableToRegister] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+
   const navigate = useNavigate();
 
   async function handleRegister(event: FormEvent) {
     event.preventDefault();
+    setButtonDisabled(true);
 
     if (
       !registerName ||
@@ -47,6 +50,9 @@ export default function Register() {
 
         if (!data) {
           setEnableToRegister(true);
+          setEnableToRegister(false);
+          setPasswordMatch(false);
+          setButtonDisabled(false);
         }
 
         setTimeout(() => {
@@ -57,9 +63,6 @@ export default function Register() {
         setEnableToRegister(true);
         console.log(error);
       });
-
-    setEnableToRegister(false);
-    setPasswordMatch(false);
   }
 
   return (
@@ -107,8 +110,8 @@ export default function Register() {
                     setRegisterPassword(event.target.value);
                   }}
                   autoComplete="off"
-                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$"
-                  title="Password must be 8-10 (With 1 capital, 1 lower and 1 special character)"
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$"
+                  title="Password must be 8-15 (With 1 capital, 1 lower and 1 special character)"
                 />
               </div>
 
@@ -124,8 +127,8 @@ export default function Register() {
                   required
                   value={registerConfirmPassword}
                   autoComplete="off"
-                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$"
-                  title="Password must be 8-10 (With 1 capital, 1 lower and 1 special character)"
+                  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$"
+                  title="Password must be 8-15 (With 1 capital, 1 lower and 1 special character)"
                   onChange={event =>
                     setRegisterConfirmPassword(event.target.value)
                   }
@@ -138,7 +141,10 @@ export default function Register() {
 
               {passwordMatch && <AuthError content="Passwords should match!" />}
 
-              <AuthButton title="Sign Up" />
+              <AuthButton
+                disabled={buttonDisabled}
+                title={buttonDisabled ? 'Registering...' : 'Sign Up'}
+              />
 
               <AuthParagraph
                 buttonContent="Sign in"

@@ -14,10 +14,13 @@ export default function Login() {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [enableToLogin, setEnableToLogin] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+
   const navigate = useNavigate();
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
+    setButtonDisabled(true);
 
     if (!loginEmail || !loginPassword) {
       return;
@@ -41,6 +44,7 @@ export default function Login() {
 
         setTimeout(() => {
           navigate('/dashboard');
+          setButtonDisabled(false);
         }, 500);
       })
       .catch(error => {
@@ -90,7 +94,10 @@ export default function Login() {
                 <AuthError content="Invalid email or password!" />
               )}
 
-              <AuthButton title="Sign In" />
+              <AuthButton
+                disabled={buttonDisabled}
+                title={buttonDisabled ? 'Authenticating...' : 'Sign In'}
+              />
 
               <AuthParagraph
                 buttonContent="Sign up"

@@ -23,6 +23,7 @@ export default function Contact() {
   const [contactMessage, setContactMessage] = useState('');
   const [unableToSendMessage, setUnableToSendMessage] = useState(false);
   const [sentMessage, setSentMessage] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const serviceId = import.meta.env.VITE_SERVICE_ID;
   const templateId = import.meta.env.VITE_TEMPLATE_ID;
@@ -30,6 +31,7 @@ export default function Contact() {
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
+    setButtonDisabled(true);
 
     if (!contactEmail || !contactName || !contactMessage) {
       return;
@@ -50,6 +52,11 @@ export default function Contact() {
         .then(response => {
           setSentMessage(true);
           setUnableToSendMessage(false);
+          setContactEmail('');
+          setContactMessage('');
+          setContactName('');
+          setContactPhone('');
+          setButtonDisabled(false);
         })
         .catch(err => {
           setUnableToSendMessage(true);
@@ -168,9 +175,10 @@ export default function Contact() {
                 <div>
                   <button
                     type="submit"
+                    disabled={buttonDisabled}
                     className="bg-primary border-primary w-full rounded border p-3 text-white transition bg-secondary-500 hover:opacity-70 focus:ring-accent-500 focus:ring-4 focus:outline-none"
                   >
-                    Send Message
+                    {buttonDisabled ? 'Sending...' : 'Send Message'}
                   </button>
                 </div>
               </form>

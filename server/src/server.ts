@@ -13,6 +13,10 @@ export const fastify = Fastify({
   logger: true
 });
 
+fastify.get('/healthcheck', async (request, response) => {
+  return { satus: 'ok' };
+});
+
 fastify.register(cors);
 
 // Register jwt into the server

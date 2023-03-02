@@ -43,7 +43,10 @@ async function bootstrap() {
   await fastify.register(transactionRoutes, { prefix: 'api/transactions' });
 
   // Put the server to lister to the port 3333
-  await fastify.listen({ port: 3333, host: '0.0.0' });
+  await fastify.listen({
+    port: (process.env.PORT as unknown as number) || 3333,
+    host: '0.0.0.0'
+  });
 }
 
 bootstrap();

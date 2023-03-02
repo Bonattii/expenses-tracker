@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "undefined/subscriptions/049d747e-57a4-416a-a077-6a24de5b5ad1/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/expenses-tracker",
+  "appService.deploySubpath": "."
+}

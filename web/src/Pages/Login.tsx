@@ -36,6 +36,7 @@ export default function Login() {
 
         if (!token) {
           setEnableToLogin(true);
+          setButtonDisabled(false);
         }
 
         // Store the user token on the local storage of the browser
@@ -49,6 +50,7 @@ export default function Login() {
       })
       .catch(error => {
         setEnableToLogin(true);
+        setButtonDisabled(false);
       });
 
     setEnableToLogin(false);

@@ -36,6 +36,7 @@ export default function Register() {
 
     if (registerPassword !== registerConfirmPassword) {
       setPasswordMatch(true);
+      setButtonDisabled(false);
       return;
     }
 
@@ -61,6 +62,7 @@ export default function Register() {
       })
       .catch(error => {
         setEnableToRegister(true);
+        setButtonDisabled(false);
         console.log(error);
       });
   }

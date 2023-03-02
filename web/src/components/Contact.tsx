@@ -1,4 +1,8 @@
+import { send } from '@emailjs/browser';
+
 import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline';
+import { FormEvent, useState } from 'react';
+import AuthError from './AuthError';
 
 import HomeInput from './HomeInput';
 import Label from './Label';
@@ -13,6 +17,50 @@ const waysOfContact = [
 ];
 
 export default function Contact() {
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [contactMessage, setContactMessage] = useState('');
+  const [unableToSendMessage, setUnableToSendMessage] = useState(false);
+  const [sentMessage, setSentMessage] = useState(false);
+
+  const serviceId = import.meta.env.VITE_SERVICE_ID;
+  const templateId = import.meta.env.VITE_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_USER_ID;
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+
+    if (!contactEmail || !contactName || !contactMessage) {
+      return;
+    }
+
+    try {
+      send(
+        serviceId,
+        templateId,
+        {
+          contactName,
+          contactEmail,
+          contactPhone,
+          contactMessage
+        },
+        publicKey
+      )
+        .then(response => {
+          setSentMessage(true);
+          setUnableToSendMessage(false);
+        })
+        .catch(err => {
+          setUnableToSendMessage(true);
+          console.log(err);
+        });
+    } catch (error) {
+      setUnableToSendMessage(true);
+      console.log(error);
+    }
+  }
+
   return (
     <section
       id="contact"
@@ -60,33 +108,43 @@ export default function Contact() {
           </div>
 
           <div className="w-full px-4 lg:w-1/2 xl:w-5/12">
-            <div className="relative rounded-lg bg-secondary-500 p-8 shadow-lg sm:p-12">
-              <form>
-                <div className="mb-6">
+            <div className="relative rounded-lg bg-secondary-500 shadow-lg p-6 space-y-4 md:space-y-6 sm:p-8">
+              <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                <div>
                   <Label htmlFor="contactName" content="Name" />
                   <HomeInput
                     id="contactName"
                     placeholder="Your Name"
                     required
+                    value={contactName}
+                    onChange={event => setContactName(event.target.value)}
                   />
                 </div>
 
-                <div className="mb-6">
+                <div>
                   <Label htmlFor="contactEmail" content="Email" />
                   <HomeInput
                     id="contactEmail"
                     type="email"
                     placeholder="Your Email"
                     required
+                    value={contactEmail}
+                    onChange={event => setContactEmail(event.target.value)}
                   />
                 </div>
 
-                <div className="mb-6">
+                <div>
                   <Label htmlFor="contactPhone" content="Phone" />
-                  <HomeInput id="contactPhone" placeholder="Your Phone" />
+                  <HomeInput
+                    id="contactPhone"
+                    placeholder="Your Phone"
+                    required
+                    value={contactPhone}
+                    onChange={event => setContactPhone(event.target.value)}
+                  />
                 </div>
 
-                <div className="mb-6">
+                <div>
                   <Label htmlFor="contactMessage" content="Message" />
                   <Textarea
                     id="contactMessage"
@@ -94,8 +152,18 @@ export default function Contact() {
                     placeholder="Your Message"
                     required
                     autoComplete="off"
+                    value={contactMessage}
+                    onChange={event => setContactMessage(event.target.value)}
                   />
                 </div>
+
+                {unableToSendMessage && (
+                  <AuthError content="Impossible to send message, please try again!" />
+                )}
+
+                {sentMessage && (
+                  <p className="text-accent-500">Message sent!</p>
+                )}
 
                 <div>
                   <button

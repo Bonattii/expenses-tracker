@@ -2,6 +2,7 @@ require('dotenv').config();
 import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import jwt from '@fastify/jwt';
 import cors from '@fastify/cors';
+import awsLambdaFastify from '@fastify/aws-lambda';
 
 import { userRoutes } from './modules/user/user.route';
 import { userSchemas } from './modules/user/user.schema';
@@ -32,6 +33,8 @@ fastify.decorate(
   }
 );
 
+const proxy = awsLambdaFastify(fastify);
+
 async function bootstrap() {
   // Register the schemas into the server
   for (const schema of [...userSchemas, ...transactionSchemas]) {
@@ -43,7 +46,18 @@ async function bootstrap() {
   await fastify.register(transactionRoutes, { prefix: 'api/transactions' });
 
   // Put the server to lister to the port 3333
-  await fastify.listen({ port: 3333, host: '0.0.0' });
+  // await fastify.listen({ port: 3333, host: '0.0.0' });
 }
 
 bootstrap();
+
+exports.handler = proxy;
+
+if (require.main === module) {
+  fastify.listen({ port: 3333 }, err => {
+    if (err) console.log(err);
+    console.log('Server listening on 3333');
+  });
+} else {
+  module.exports = fastify;
+}

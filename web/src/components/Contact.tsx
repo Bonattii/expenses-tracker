@@ -1,9 +1,9 @@
-import { send } from '@emailjs/browser';
-
-import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline';
 import { FormEvent, useState } from 'react';
-import AuthError from './AuthError';
+import { send } from '@emailjs/browser';
+import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline';
 
+
+import SubmitFormError from './SubmitFormError';
 import HomeInput from './HomeInput';
 import Label from './Label';
 import Textarea from './Textarea';
@@ -165,7 +165,7 @@ export default function Contact() {
                 </div>
 
                 {unableToSendMessage && (
-                  <AuthError content="Impossible to send message, please try again!" />
+                  <SubmitFormError content="Impossible to send message, please try again!" />
                 )}
 
                 {sentMessage && (

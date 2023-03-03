@@ -24,7 +24,9 @@ export default function TableRow(props: TableRowProps) {
     props.onDelete(props.id);
   }
 
-  async function handleUpdate() {
+  async function handleUpdate(event: FormEvent) {
+    event.preventDefault();
+
     api
       .put(
         '/api/transactions',
@@ -40,6 +42,8 @@ export default function TableRow(props: TableRowProps) {
         }
       )
       .then(() => {
+        setUpdateText('');
+        setUpdateValue('');
         alert('Transaction successfully updated!');
       });
   }

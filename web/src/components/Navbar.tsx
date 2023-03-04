@@ -8,14 +8,14 @@ import './Navbar.css';
 import logo from '../assets/etracker.svg';
 
 const navigation = [
-  { name: 'Home', href: '/', current: true },
-  { name: 'About', href: '#about', current: false },
-  { name: 'Contact', href: '#contact', current: false }
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '#about' },
+  { name: 'Contact', href: '#contact' }
 ];
 
 const loggedNavigation = [
-  { name: 'Dashboard', href: '/dashboard', current: true },
-  { name: 'History', href: '/history', current: false }
+  { name: 'Dashboard', href: '/dashboard' },
+  { name: 'History', href: '/history' }
 ];
 
 function classNames(...classes: string[]) {
@@ -91,12 +91,8 @@ export default function Navbar() {
                           <a
                             key={item.name}
                             href={item.href}
-                            className={classNames(
-                              item.current
-                                ? 'bg-accent-500 text-primary-500'
-                                : 'text-gray-300 hover:bg-secondary-500 hover:text-white',
-                              'px-3 py-2 rounded-md text-sm font-medium focus:ring-accent-500 focus:ring-2 focus:outline-none'
-                            )}
+                            className="text-gray-300 hover:bg-secondary-500 hover:text-white
+                              px-3 py-2 rounded-md text-sm font-medium focus:ring-accent-500 focus:ring-2 focus:outline-none"
                           >
                             {item.name}
                           </a>

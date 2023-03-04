@@ -50,7 +50,6 @@ export default function DashboardForm(props: DashboardFormProps) {
         props.onFormSubmit();
       });
 
-    setSubmitted(false);
     setUnableToAdd(false);
   }
 
@@ -59,7 +58,7 @@ export default function DashboardForm(props: DashboardFormProps) {
       .min(3, 'Text should have at least 3 characters')
       .required('Text is required'),
     transactionValue: Yup.string()
-      .matches(/^[-0-9]+$/, 'Must be only digits')
+      .matches(/^[+-]?([0-9]*[.])?[0-9]+$/, 'Must be only digits')
       .required('Value is required')
   };
 

@@ -66,8 +66,6 @@ export default function RegisterForm() {
         setSubmitted(false);
         setEnableToRegister(true);
       });
-
-    setSubmitted(false);
     setPasswordMatch(false);
     setEnableToRegister(false);
   }
@@ -78,7 +76,7 @@ export default function RegisterForm() {
       .email('Invalid Email')
       .required('Email is required'),
     registerPassword: Yup.string()
-      .min(8, 'Password needs to have minimum of 8 characters') 
+      .min(8, 'Password needs to have minimum of 8 characters')
       .max(15, 'Password needs to have maximum of 15 characters')
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,

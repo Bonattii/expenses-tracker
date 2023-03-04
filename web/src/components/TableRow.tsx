@@ -56,7 +56,6 @@ export default function TableRow(props: TableRowProps) {
       })
       .catch(error => setUnableToUpdate(true));
 
-    setSubmitted(false);
     setUnableToUpdate(false);
   }
 
@@ -65,7 +64,7 @@ export default function TableRow(props: TableRowProps) {
       .min(3, 'Text should have at least 3 characters')
       .required('Text is required'),
     updateValue: Yup.string()
-      .matches(/^[-0-9]+$/, 'Must be only digits')
+      .matches(/^[+-]?([0-9]*[.])?[0-9]+$/, 'Must be only digits')
       .required('Value is required')
   };
 
@@ -155,7 +154,7 @@ export default function TableRow(props: TableRowProps) {
                             htmlFor="updateValue"
                             className="block mb-2 text-sm font-medium"
                           >
-                            Amount <span className='text-red-600'> *</span>
+                            Amount <span className="text-red-600"> *</span>
                             <small className="text-white">
                               {' '}
                               (

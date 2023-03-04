@@ -53,8 +53,6 @@ export default function LoginForm() {
         setSubmitted(false);
         setEnableToLogin(true);
       });
-
-    setSubmitted(false);
     setEnableToLogin(false);
   }
 

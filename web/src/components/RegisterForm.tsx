@@ -14,6 +14,7 @@ import ValidationError from './ValidationError';
 export default function RegisterForm() {
   const [enableToRegister, setEnableToRegister] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const navigate = useNavigate();
 
@@ -23,6 +24,8 @@ export default function RegisterForm() {
     registerPassword: string;
     registerConfirmPassword: string;
   }) {
+    setSubmitted(true);
+
     if (
       !values.registerName ||
       !values.registerEmail ||
@@ -33,6 +36,7 @@ export default function RegisterForm() {
     }
 
     if (values.registerPassword !== values.registerConfirmPassword) {
+      setSubmitted(false);
       setPasswordMatch(true);
       return;
     }
@@ -48,17 +52,22 @@ export default function RegisterForm() {
 
         if (!data) {
           setEnableToRegister(true);
+          setSubmitted(false);
           setPasswordMatch(false);
         }
+
+        setSubmitted(false);
 
         setTimeout(() => {
           navigate('/login');
         }, 500);
       })
       .catch(error => {
+        setSubmitted(false);
         setEnableToRegister(true);
       });
 
+    setSubmitted(false);
     setPasswordMatch(false);
     setEnableToRegister(false);
   }
@@ -69,12 +78,20 @@ export default function RegisterForm() {
       .email('Invalid Email')
       .required('Email is required'),
     registerPassword: Yup.string()
-      .min(8, 'Password needs to have minimum of 8 characters')
+      .min(8, 'Password needs to have minimum of 8 characters') 
       .max(15, 'Password needs to have maximum of 15 characters')
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character'
+      )
       .required('Password is required'),
     registerConfirmPassword: Yup.string()
       .min(8, 'Password needs to have minimum of 8 characters')
       .max(15, 'Password needs to have maximum of 15 characters')
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+        'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character'
+      )
       .required('Confirm Password is required')
   };
 
@@ -93,7 +110,6 @@ export default function RegisterForm() {
         {props => {
           const {
             values,
-            isSubmitting,
             handleChange,
             handleBlur,
             handleSubmit,
@@ -204,8 +220,8 @@ export default function RegisterForm() {
               )}
 
               <AuthButton
-                disabled={isSubmitting}
-                title={isSubmitting ? 'Registering...' : 'Sign Up'}
+                disabled={submitted}
+                title={submitted ? 'Registering...' : 'Sign Up'}
               />
 
               <AuthParagraph

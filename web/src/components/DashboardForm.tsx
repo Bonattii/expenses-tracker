@@ -45,10 +45,12 @@ export default function DashboardForm(props: DashboardFormProps) {
         if (!response) {
           setUnableToAdd(true);
         }
+
         setSubmitted(false);
         props.onFormSubmit();
       });
 
+    setSubmitted(false);
     setUnableToAdd(false);
   }
 
@@ -76,7 +78,6 @@ export default function DashboardForm(props: DashboardFormProps) {
         {props => {
           const {
             values,
-            isSubmitting,
             handleChange,
             handleBlur,
             handleSubmit,

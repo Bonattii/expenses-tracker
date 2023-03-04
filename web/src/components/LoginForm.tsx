@@ -12,12 +12,16 @@ import AuthParagraph from './AuthParagraph';
 
 export default function LoginForm() {
   const [enableToLogin, setEnableToLogin] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
   const navigate = useNavigate();
 
   async function handleSubmit(values: {
     loginEmail: string;
     loginPassword: string;
   }) {
+    setSubmitted(true);
+
     if (!values.loginEmail || !values.loginPassword) {
       return;
     }
@@ -31,6 +35,7 @@ export default function LoginForm() {
         const token = response.data.accesToken;
 
         if (!token) {
+          setSubmitted(false);
           setEnableToLogin(true);
         }
 
@@ -38,14 +43,18 @@ export default function LoginForm() {
         localStorage.clear();
         localStorage.setItem('user-token', token);
 
+        setSubmitted(false);
+
         setTimeout(() => {
           navigate('/dashboard');
         }, 500);
       })
       .catch(error => {
+        setSubmitted(false);
         setEnableToLogin(true);
       });
 
+    setSubmitted(false);
     setEnableToLogin(false);
   }
 
@@ -72,7 +81,6 @@ export default function LoginForm() {
         {props => {
           const {
             values,
-            isSubmitting,
             handleChange,
             handleBlur,
             handleSubmit,
@@ -135,8 +143,8 @@ export default function LoginForm() {
               )}
 
               <AuthButton
-                disabled={isSubmitting}
-                title={isSubmitting ? 'Authenticating...' : 'Sign In'}
+                disabled={submitted}
+                title={submitted ? 'Authenticating...' : 'Sign In'}
               />
 
               <AuthParagraph

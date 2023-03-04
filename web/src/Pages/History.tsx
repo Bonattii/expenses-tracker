@@ -18,6 +18,7 @@ export default function History() {
     ]
   >();
   const [isDeleted, setIsDeleted] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const userToken = localStorage.getItem('user-token');
 
@@ -32,7 +33,11 @@ export default function History() {
         setTransactions(response.data);
         setIsDeleted(false);
       });
-  }, [isDeleted]);
+  }, [isDeleted || isUpdated]);
+
+  async function updateTransaction() {
+    setIsUpdated(!isUpdated);
+  }
 
   async function deleteTransaction(id: string) {
     api
@@ -70,6 +75,7 @@ export default function History() {
                         value={transaction.value / 100}
                         id={transaction.id}
                         onDelete={deleteTransaction}
+                        onUpdate={updateTransaction}
                       />
                     ))}
                   </tbody>

@@ -12,6 +12,7 @@ interface TableRowProps {
   value: number;
   id: string;
   onDelete: Function;
+  onUpdate: Function;
 }
 
 export default function TableRow(props: TableRowProps) {
@@ -43,10 +44,8 @@ export default function TableRow(props: TableRowProps) {
         }
       )
       .then(() => {
-        setUpdateText('');
-        setUpdateValue('');
+        props.onUpdate();
         setUpdateSubmitted(false);
-        alert('Transaction successfully updated!');
       });
   }
 

@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
+import { send } from '@emailjs/browser';
 
 import Label from './Label';
-import AuthInput from './AuthInput';
 import SubmitFormError from './SubmitFormError';
-import AuthButton from './AuthButton';
-import AuthParagraph from './AuthParagraph';
-import { send } from '@emailjs/browser';
 import ValidationError from './ValidationError';
 import HomeInput from './HomeInput';
 import Textarea from './Textarea';
@@ -15,6 +12,7 @@ import Textarea from './Textarea';
 export default function ContactForm() {
   const [unableToSendMessage, setUnableToSendMessage] = useState(false);
   const [sentMessage, setSentMessage] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const serviceId = import.meta.env.VITE_SERVICE_ID;
   const templateId = import.meta.env.VITE_TEMPLATE_ID;
@@ -26,6 +24,8 @@ export default function ContactForm() {
     contactPhone: string;
     contactMessage: string;
   }) {
+    setSubmitted(true);
+
     if (
       !values.contactEmail ||
       !values.contactName ||
@@ -50,12 +50,15 @@ export default function ContactForm() {
         .then(response => {
           setSentMessage(true);
           setUnableToSendMessage(false);
+          setSubmitted(false);
         })
         .catch(err => {
           setUnableToSendMessage(true);
+          setSubmitted(false);
         });
     } catch (error) {
       setUnableToSendMessage(true);
+      setSubmitted(false);
     }
 
     setTimeout(() => setSentMessage(false), 500);
@@ -68,7 +71,10 @@ export default function ContactForm() {
       .required('Email is required'),
     contactName: Yup.string().required('Name is required'),
     contactPhone: Yup.string()
-      .length(10, 'Phone should be like (123) 456-7890')
+      .matches(
+        /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+        'Phone number is not valid'
+      )
       .required('Phone is required'),
     contactMessage: Yup.string()
       .min(20, 'Message should have at least 20 characters')
@@ -84,13 +90,15 @@ export default function ContactForm() {
           contactPhone: '',
           contactMessage: ''
         }}
-        onSubmit={values => handleSubmit(values)}
+        onSubmit={async (values, { resetForm }) => {
+          await handleSubmit(values);
+          return resetForm();
+        }}
         validationSchema={Yup.object().shape(yupValidationSchema)}
       >
         {props => {
           const {
             values,
-            isSubmitting,
             handleChange,
             handleBlur,
             handleSubmit,
@@ -197,10 +205,10 @@ export default function ContactForm() {
               <div>
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={submitted}
                   className="bg-primary border-primary w-full rounded border p-3 text-white transition bg-secondary-500 hover:opacity-70 focus:ring-accent-500 focus:ring-4 focus:outline-none"
                 >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                  {submitted ? 'Sending...' : 'Send Message'}
                 </button>
               </div>
             </form>

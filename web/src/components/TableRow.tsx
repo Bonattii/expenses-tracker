@@ -2,10 +2,13 @@ import { FormEvent, useState } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { api } from '../lib/axios';
+import * as Yup from 'yup';
 
 import Label from './Label';
 import AuthInput from './AuthInput';
 import AuthButton from './AuthButton';
+import { Field, Formik } from 'formik';
+import SubmitFormError from './SubmitFormError';
 
 interface TableRowProps {
   text: string;
@@ -16,9 +19,9 @@ interface TableRowProps {
 }
 
 export default function TableRow(props: TableRowProps) {
-  const [updateText, setUpdateText] = useState('');
-  const [updateValue, setUpdateValue] = useState('');
   const [updateSubmitted, setUpdateSubmitted] = useState(false);
+  const [unableToUpdate, setUnableToUpdate] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const userToken = localStorage.getItem('user-token');
 
@@ -26,15 +29,18 @@ export default function TableRow(props: TableRowProps) {
     props.onDelete(props.id);
   }
 
-  async function handleUpdate(event: FormEvent) {
-    event.preventDefault();
+  async function handleUpdate(values: {
+    updateText: string;
+    updateValue: string;
+  }) {
+    setSubmitted(true);
 
     api
       .put(
         '/api/transactions',
         {
-          text: updateText,
-          value: Number(updateValue) * 100,
+          text: values.updateText,
+          value: Number(values.updateValue) * 100,
           id: props.id
         },
         {
@@ -46,8 +52,22 @@ export default function TableRow(props: TableRowProps) {
       .then(() => {
         props.onUpdate();
         setUpdateSubmitted(false);
-      });
+        setSubmitted(false);
+      })
+      .catch(error => setUnableToUpdate(true));
+
+    setSubmitted(false);
+    setUnableToUpdate(false);
   }
+
+  const yupValidationSchema = {
+    updateText: Yup.string()
+      .min(3, 'Text should have at least 3 characters')
+      .required('Text is required'),
+    updateValue: Yup.string()
+      .matches(/^[-0-9]+$/, 'Must be only digits')
+      .required('Value is required')
+  };
 
   return (
     <tr>
@@ -76,37 +96,117 @@ export default function TableRow(props: TableRowProps) {
                   <XMarkIcon className="block h-6 w-6" aria-label="close" />
                 </Dialog.Close>
 
-                <Dialog.Title className="text-3xl leading-tight font-bold">
+                <Dialog.Title className="text-3xl leading-tight font-bold mb-2">
                   Update Transaction
                 </Dialog.Title>
 
-                <form onSubmit={handleUpdate}>
-                  <div className="mt-8">
-                    <Label htmlFor="updateText" content="New Text" />
-                    <AuthInput
-                      id="updateText"
-                      placeholder="New Text"
-                      value={updateText}
-                      onChange={event => setUpdateText(event.target.value)}
-                      required
-                      autoComplete="off"
-                    />
-                  </div>
+                <Formik
+                  initialValues={{
+                    updateText: '',
+                    updateValue: ''
+                  }}
+                  onSubmit={async (values, { resetForm }) => {
+                    await handleUpdate(values);
+                    return resetForm();
+                  }}
+                  validationSchema={Yup.object().shape(yupValidationSchema)}
+                >
+                  {props => {
+                    const {
+                      values,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      errors,
+                      touched
+                    } = props;
 
-                  <div className="mt-8 mb-8">
-                    <Label htmlFor="updateValue" content="New Value" />
-                    <AuthInput
-                      id="updateValue"
-                      placeholder="New Value"
-                      value={updateValue}
-                      onChange={event => setUpdateValue(event.target.value)}
-                      required
-                      autoComplete="off"
-                    />
-                  </div>
+                    return (
+                      <form
+                        onSubmit={handleSubmit}
+                        className="space-y-4 md:space-y-6"
+                      >
+                        <div>
+                          <Label content="Text" htmlFor="updateText" />
 
-                  <AuthButton title="Update" />
-                </form>
+                          <Field
+                            id="updateText"
+                            name="updateText"
+                            type="text"
+                            placeholder={'Salary, Rent...'}
+                            component={AuthInput}
+                            value={values.updateText}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            aria-required="true"
+                            aria-invalid={!!errors.updateText}
+                            aria-describedby="updateTextError"
+                          />
+
+                          {errors.updateText && touched.updateText ? (
+                            <div className="mt-2 text-sm text-red-600 flex gap-2 items-center mb-4">
+                              {errors.updateText}
+                            </div>
+                          ) : null}
+                        </div>
+
+                        <div>
+                          <label
+                            htmlFor="updateValue"
+                            className="block mb-2 text-sm font-medium"
+                          >
+                            Amount <span className='text-red-600'> *</span>
+                            <small className="text-white">
+                              {' '}
+                              (
+                              <span className="text-red-400">
+                                {' '}
+                                negative-expense
+                              </span>{' '}
+                              ,
+                              <span className="text-accent-500">
+                                {' '}
+                                positive-income
+                              </span>
+                              )
+                            </small>
+                          </label>
+
+                          <Field
+                            id="updateValue"
+                            name="updateValue"
+                            type="text"
+                            placeholder={'Ex.: 2000, -1500.50...'}
+                            component={AuthInput}
+                            value={values.updateValue}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            aria-required="true"
+                            aria-invalid={!!errors.updateValue}
+                            aria-describedby="updateValueEmail"
+                          />
+
+                          {errors.updateValue && touched.updateValue ? (
+                            <div className="mt-2 text-sm text-red-600 flex gap-2 items-center">
+                              {errors.updateValue}
+                            </div>
+                          ) : null}
+                        </div>
+
+                        {unableToUpdate && (
+                          <SubmitFormError content="Unable to update. Please try again!" />
+                        )}
+
+                        <AuthButton
+                          disabled={submitted}
+                          title={
+                            submitted ? 'Updating...' : 'Update Transaction'
+                          }
+                        />
+                      </form>
+                    );
+                  }}
+                </Formik>
               </Dialog.Content>
             </Dialog.Portal>
           )}

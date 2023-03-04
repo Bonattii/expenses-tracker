@@ -116,7 +116,7 @@ export default function DashboardForm(props: DashboardFormProps) {
                   htmlFor="transactionValue"
                   className="block mb-2 text-sm font-medium"
                 >
-                  Amount
+                  Amount <span className="text-red-600"> *</span>
                   <small className="text-white">
                     {' '}
                     (<span className="text-red-400"> negative-expense</span> ,
@@ -146,7 +146,7 @@ export default function DashboardForm(props: DashboardFormProps) {
               </div>
 
               {unableToAdd && (
-                <SubmitFormError content="Unable to register. Please try again!" />
+                <SubmitFormError content="Unable to add transaction. Please try again!" />
               )}
 
               <AuthButton

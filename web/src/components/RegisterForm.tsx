@@ -75,7 +75,7 @@ export default function RegisterForm() {
     registerConfirmPassword: Yup.string()
       .min(8, 'Password needs to have minimum of 8 characters')
       .max(15, 'Password needs to have maximum of 15 characters')
-      .required('Password is required')
+      .required('Confirm Password is required')
   };
 
   return (

@@ -1,18 +1,14 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import { api } from '../lib/axios';
 
-import AuthButton from '../components/AuthButton';
-import AuthInput from '../components/AuthInput';
 import HistoryBox from '../components/HistoryBox';
-import Label from '../components/Label';
 import LoginWarning from '../components/LoginWarning';
+import DashboardForm from '../components/DashboardForm';
 
 const colors = ['#f3ef52', '#DC2626'];
 
 export default function Dashboard() {
-  const [transactionText, setTransactionText] = useState('');
-  const [transactionValue, setTransactionValue] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [balance, setBalance] = useState<number>();
   const [income, setIncome] = useState<number>();
@@ -83,35 +79,7 @@ export default function Dashboard() {
     setIsSubmitted(false);
   }, [transactions]);
 
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-
-    if (!transactionText || !transactionValue) {
-      return;
-    }
-
-    api
-      .post(
-        '/api/transactions',
-        {
-          text: transactionText,
-          value: Number(transactionValue) * 100 // Transform into cents
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userToken}`
-          }
-        }
-      )
-      .then(response => {
-        if (!response) {
-          alert('Unable to create transaction. Please try again!');
-        }
-
-        setTransactionText('');
-        setTransactionValue('');
-      });
-
+  async function formSubmitted() {
     setIsSubmitted(true);
   }
 
@@ -182,60 +150,7 @@ export default function Dashboard() {
                   </div>
 
                   <div className="bg-primary-500 border-2 border-secondary-500 p-4 rounded-md">
-                    <form onSubmit={handleSubmit} className="mt-4">
-                      <div className="my-5 text-sm">
-                        <Label htmlFor="transactionText" content="Text" />
-                        <AuthInput
-                          id="transactionText"
-                          autoFocus
-                          placeholder="Enter Text"
-                          value={transactionText}
-                          onChange={event =>
-                            setTransactionText(event.target.value)
-                          }
-                          required
-                          autoComplete="off"
-                        />
-                      </div>
-
-                      <div className="my-5 text-sm">
-                        <label
-                          htmlFor="transactionValue"
-                          className="block mb-2 text-sm font-medium"
-                        >
-                          Amount
-                          <small className="text-white">
-                            {' '}
-                            (
-                            <span className="text-red-400">
-                              {' '}
-                              negative-expense
-                            </span>{' '}
-                            ,
-                            <span className="text-accent-500">
-                              {' '}
-                              positive-income
-                            </span>
-                            )
-                          </small>
-                        </label>
-                        <AuthInput
-                          id="transactionValue"
-                          autoFocus
-                          placeholder="Enter Amount"
-                          value={transactionValue}
-                          onChange={event =>
-                            setTransactionValue(event.target.value)
-                          }
-                          required
-                          autoComplete="off"
-                        />
-                      </div>
-
-                      <div className="my-5">
-                        <AuthButton title="Add Transaction" />
-                      </div>
-                    </form>
+                    <DashboardForm onFormSubmit={formSubmitted} />
                   </div>
                 </div>
               </div>

@@ -3,7 +3,7 @@ import { buildJsonSchemas } from 'fastify-zod';
 
 const transactionInput = {
   text: z.string(),
-  value: z.number()
+  value: z.bigint()
 };
 
 const transactionGenerated = {

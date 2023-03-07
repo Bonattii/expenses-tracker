@@ -13,7 +13,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Transaction" (
     "id" TEXT NOT NULL,
     "text" TEXT NOT NULL,
-    "value" INTEGER NOT NULL,
+    "value" BIGINT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "ownerId" TEXT NOT NULL,

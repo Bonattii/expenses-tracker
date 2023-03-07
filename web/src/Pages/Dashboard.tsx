@@ -32,52 +32,55 @@ export default function Dashboard() {
     { text: 'Expenses', amount: expenses }
   ];
 
-  // Get all the users transactions
-  useEffect(() => {
-    api
-      .get('/api/transactions', {
-        headers: {
-          Authorization: `Bearer ${userToken}`
-        }
-      })
-      .then(response => {
-        setTransactions(response.data);
-        setIsSubmitted(false);
-      });
-  }, [isSubmitted]);
+  if (userToken) {
+    // Get all the users transactions
+    useEffect(() => {
+      api
+        .get('/api/transactions', {
+          headers: {
+            Authorization: `Bearer ${userToken}`
+          }
+        })
+        .then(response => {
+          setTransactions(response.data);
+          setIsSubmitted(false);
+        });
+    }, [isSubmitted]);
 
-  // Update the balance for the first time b4 adding a new one
-  useEffect(() => {
-    setBalance(
-      transactions?.reduce(
-        (accumulator, currentValue) => accumulator + currentValue.value / 100,
-        0
-      )
-    );
-
-    // Filter for values > 0 and than sum
-    setIncome(
-      transactions
-        ?.filter(transaction => transaction.value > 0)
-        ?.reduce(
+    // Update the balance for the first time b4 adding a new one
+    useEffect(() => {
+      setBalance(
+        transactions?.reduce(
           (accumulator, currentValue) => accumulator + currentValue.value / 100,
           0
         )
-    );
+      );
 
-    // Filter for values < 0 and than sum
-    setExpenses(
-      transactions
-        ?.filter(transaction => transaction.value < 0)
-        ?.reduce(
-          (accumulator, currentValue) =>
-            accumulator + (currentValue.value / 100) * -1,
-          0
-        )
-    );
+      // Filter for values > 0 and than sum
+      setIncome(
+        transactions
+          ?.filter(transaction => transaction.value > 0)
+          ?.reduce(
+            (accumulator, currentValue) =>
+              accumulator + currentValue.value / 100,
+            0
+          )
+      );
 
-    setIsSubmitted(false);
-  }, [transactions]);
+      // Filter for values < 0 and than sum
+      setExpenses(
+        transactions
+          ?.filter(transaction => transaction.value < 0)
+          ?.reduce(
+            (accumulator, currentValue) =>
+              accumulator + (currentValue.value / 100) * -1,
+            0
+          )
+      );
+
+      setIsSubmitted(false);
+    }, [transactions]);
+  }
 
   async function formSubmitted() {
     setIsSubmitted(true);

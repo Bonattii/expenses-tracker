@@ -22,18 +22,20 @@ export default function History() {
 
   const userToken = localStorage.getItem('user-token');
 
-  useEffect(() => {
-    api
-      .get('/api/transactions', {
-        headers: {
-          Authorization: `Bearer ${userToken}`
-        }
-      })
-      .then(response => {
-        setTransactions(response.data);
-        setIsDeleted(false);
-      });
-  }, [isDeleted || isUpdated]);
+  if (userToken) {
+    useEffect(() => {
+      api
+        .get('/api/transactions', {
+          headers: {
+            Authorization: `Bearer ${userToken}`
+          }
+        })
+        .then(response => {
+          setTransactions(response.data);
+          setIsDeleted(false);
+        });
+    }, [isDeleted || isUpdated]);
+  }
 
   async function updateTransaction() {
     setIsUpdated(!isUpdated);

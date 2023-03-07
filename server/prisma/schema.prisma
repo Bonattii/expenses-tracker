@@ -24,7 +24,7 @@ model User {
 model Transaction {
   id        String   @id @default(cuid())
   text      String
-  value     Int
+  value     BigInt
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

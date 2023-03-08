@@ -64,6 +64,12 @@ You can acess the project with this link [Expenses Tracker](https://expenses-tra
 - Update expenses or incomes
 - Delete expenses or incomes
 
+## Next Features to be implemented
+
+- Handle bigInt values
+- Separate expenses by division
+- Separate expenses by categories
+
 ## Credits
 
 - The dashboard page was inspire on this person work [safwanAzman](https://tailwindcomponents.com/u/safwanazman)

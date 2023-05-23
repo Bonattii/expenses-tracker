@@ -16,7 +16,7 @@
 
 Expenses Tracker is a web application focused on helping users to manage their income and expenses. By now,  users can create and login into their private accounts, where they can store their earnings and expenses while seeing a pie graph of them. The main focus is on people that want to track their finances, allowing them to control their expenses and focus on saving money. Mobile and desktop users can use the application.
 
-## Table of Contents (Optional)
+## Table of Contents
 
 - [Installation](#installation)
 - [Usage](#usage)
